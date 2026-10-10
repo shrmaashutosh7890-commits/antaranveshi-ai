@@ -1,0 +1,9 @@
+
+{
+  "version": 2,
+  "functions": {
+    "api/chat.py": {
+      "runtime": "python3.12"
+    }
+  }
+}
