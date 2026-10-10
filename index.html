@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Antaranveshi AI</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div class="app">
+        <header class="header">
+            <div class="logo">A</div>
+            <div>
+                <h1>Antaranveshi AI</h1>
+                <p>Research beyond ordinary answers</p>
+            </div>
+            <span class="status">● Online</span>
+        </header>
+
+        <main class="chat-area" id="chatArea">
+            <div class="welcome">
+                <h2>Namaste! 👋</h2>
+                <p>What would you like to discover today?</p>
+                <div class="suggestions">
+                    <button onclick="useSuggestion('Explain artificial intelligence')">
+                        Explain Artificial Intelligence
+                    </button>
+                    <button onclick="useSuggestion('How can I verify a historical fact?')">
+                        Verify a historical fact
+                    </button>
+                    <button onclick="useSuggestion('Find reliable sources for my research')">
+                        Find research sources
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <form class="input-area" id="chatForm">
+            <textarea
+                id="userInput"
+                placeholder="Ask a question..."
+                rows="1"
+                required
+            ></textarea>
+            <button type="submit" id="sendButton">Send ➤</button>
+        </form>
+
+        <footer>
+            AI can make mistakes. Verify important information using sources.
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
