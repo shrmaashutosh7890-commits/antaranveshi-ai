@@ -51,10 +51,9 @@ class AntaranveshiHandler(SimpleHTTPRequestHandler):
 
 
 if __name__ == "__main__":
-    server = HTTPServer(("127.0.0.1", 8000), AntaranveshiHandler)
-    print("Antaranveshi AI backend is running!")
-    print("Website: http://127.0.0.1:8000")
-    print("Press Ctrl+C to stop.")
+    port = int(os.environ.get("PORT", 8000))
+    server = HTTPServer(("0.0.0.0", port), AntaranveshiHandler)
+    print(f"Antaranveshi AI backend is running on port {port}")
     try:
         server.serve_forever()
     except KeyboardInterrupt:
