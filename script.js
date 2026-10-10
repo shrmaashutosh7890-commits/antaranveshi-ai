@@ -190,7 +190,7 @@ async function sendMessage(text) {
     const loadingMessage = addMessage("Thinking...", "assistant");
 
     try {
-        const response = await fetch("/api/chat", {
+        const response = await fetch("/chat", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
