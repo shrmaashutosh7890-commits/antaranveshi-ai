@@ -1,9 +1,4 @@
 
 {
-  "version": 2,
-  "functions": {
-    "api/chat.py": {
-      "runtime": "python3.12"
-    }
-  }
+  "$schema": "https://openapi.vercel.sh/vercel.json"
 }
