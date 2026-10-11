@@ -75,7 +75,7 @@ def generate_reply(question):
                     "sources were returned, say so clearly. "
                     "Do not pretend that a search was successful. "
                     "If sources disagree, explain the disagreement. "
-                    ""Reply in the user's language. "
+                    "Reply in the user's language. "
 "Use clean, natural, grammatically correct language. "
 "If replying in Hindi, write Hindi words in Devanagari script "
 "and keep English technical terms in English. "
