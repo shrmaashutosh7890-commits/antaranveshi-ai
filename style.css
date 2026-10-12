@@ -99,7 +99,10 @@ body {
 .logo-image {
     width: 66px;
     height: 66px;
+    object-fit: contain;
+    border-radius: 50%;
     flex-shrink: 0;
+}
 
     display: block;
     object-fit: contain;
