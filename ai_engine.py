@@ -48,7 +48,7 @@ def add_source_links(answer, message):
     return answer.rstrip() + "\n\n" + "\n".join(source_lines)
 
 
-def generate_reply(question):
+def generate_reply(question, mode="quick"):
     api_key = os.environ.get("OPENROUTER_API_KEY")
 
     if not api_key:
