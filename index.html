@@ -1,63 +1,137 @@
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Antaranveshi AI</title>
+
+    <title>Antaranveshi AI — Research Beyond Ordinary Answers</title>
+    <meta name="description" content="Explore questions, investigate sources, and discover reliable information with Antaranveshi AI.">
+
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
 
+<body>
     <div class="app">
+
+        <!-- Header -->
         <header class="header">
-            <div class="logo">A</div>
-            <div>
-                <h1>Antaranveshi AI</h1>
-                <p>Research beyond ordinary answers</p>
+            <div class="brand">
+                <img
+                    src="logo.png"
+                    alt="Antaranveshi AI Logo"
+                    class="logo-image"
+                >
+
+                <div class="brand-text">
+                    <h1>Antaranveshi AI</h1>
+                    <p>Research beyond ordinary answers</p>
+                </div>
             </div>
-            <span class="status">● Online</span>
+
+            <div class="status">
+                <span class="status-dot"></span>
+                <span>AI Research</span>
+            </div>
         </header>
 
+        <!-- Chat Area -->
         <main class="chat-area" id="chatArea">
+
             <div class="welcome">
-                <h2>Namaste! 👋</h2>
-                <p>What would you like to discover today?</p>
+                <div class="welcome-icon">✦</div>
+
+                <p class="eyebrow">WELCOME TO ANTARANVESHI</p>
+
+                <h2>Questions lead to discoveries.</h2>
+
+                <p class="welcome-description">
+                    Explore ideas, investigate history, compare evidence,
+                    and discover reliable information.
+                </p>
+
                 <div class="suggestions">
-                    <button onclick="useSuggestion('Explain artificial intelligence')">
-                        Explain Artificial Intelligence
+                    <button
+                        type="button"
+                        onclick="useSuggestion('Explain artificial intelligence with reliable sources')"
+                    >
+                        <span class="suggestion-icon">✧</span>
+                        <span>
+                            <strong>Explore AI</strong>
+                            <small>Understand artificial intelligence</small>
+                        </span>
+                        <span class="suggestion-arrow">↗</span>
                     </button>
-                    <button onclick="useSuggestion('How can I verify a historical fact?')">
-                        Verify a historical fact
+
+                    <button
+                        type="button"
+                        onclick="useSuggestion('Research Maharana Pratap using primary historical sources')"
+                    >
+                        <span class="suggestion-icon">⌕</span>
+                        <span>
+                            <strong>Historical research</strong>
+                            <small>Investigate historical evidence</small>
+                        </span>
+                        <span class="suggestion-arrow">↗</span>
                     </button>
-                    <button onclick="useSuggestion('Find reliable sources for my research')">
-                        Find research sources
+
+                    <button
+                        type="button"
+                        onclick="useSuggestion('How can I verify whether a historical claim is true?')"
+                    >
+                        <span class="suggestion-icon">◎</span>
+                        <span>
+                            <strong>Verify a claim</strong>
+                            <small>Check facts and sources</small>
+                        </span>
+                        <span class="suggestion-arrow">↗</span>
                     </button>
                 </div>
             </div>
-        </main>
-        
-        <div class="research-mode">
-            <label for="researchMode">Research Mode:</label>
-            <select id="researchMode">
-                <option value="quick">⚡ Quick Research</option>
-                <option value="deep">🔎 Deep Research</option>
-            </select>
-        </div>
 
-      <form class="input-area" id="chatForm">
+        </main>
+
+        <!-- Research Mode -->
+        <section class="research-controls">
+            <div class="mode-heading">
+                <span class="mode-indicator"></span>
+                <label for="researchMode">Research mode</label>
+            </div>
+
+            <select id="researchMode" name="researchMode">
+                <option value="quick">⚡ Quick Research</option>
+                <option value="deep">⌕ Deep Research</option>
+            </select>
+        </section>
+
+        <!-- Message Input -->
+        <form class="input-area" id="chatForm">
+
             <textarea
                 id="userInput"
-                placeholder="Ask a question..."
+                name="message"
+                placeholder="Ask anything you want to investigate..."
                 rows="1"
                 required
             ></textarea>
-            <button type="submit" id="sendButton">Send ➤</button>
+
+            <button
+                type="submit"
+                id="sendButton"
+                aria-label="Send message"
+            >
+                <span>Research</span>
+                <span class="send-icon">↗</span>
+            </button>
+
         </form>
 
-        <footer>
+        <footer class="footer">
+            <span>✦</span>
             AI can make mistakes. Verify important information using sources.
         </footer>
+
     </div>
 
     <script src="script.js"></script>
