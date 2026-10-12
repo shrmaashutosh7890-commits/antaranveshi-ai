@@ -195,9 +195,12 @@ async function sendMessage(text) {
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({
-                message: question
-            })
+            
+      body: JSON.stringify({
+    message: question,
+    mode: document.getElementById("researchMode").value
+})
+
         });
 
         const data = await response.json();
