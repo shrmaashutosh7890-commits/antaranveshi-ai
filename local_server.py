@@ -24,7 +24,7 @@ class AntaranveshiHandler(SimpleHTTPRequestHandler):
                 return
 
             mode = body.get("mode", "quick")
-             answer = generate_reply(question, mode)
+            answer = generate_reply(question, mode)
             self.send_json({"reply": answer})
 
         except Exception as error:
