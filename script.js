@@ -4,6 +4,33 @@ const chatForm = document.getElementById("chatForm");
 const userInput = document.getElementById("userInput");
 const sendButton = document.getElementById("sendButton");
 
+const researchTools = [
+    {
+        key: "evidence",
+        icon: "🔬",
+        name: "Evidence Lab",
+        description: "Check evidence and claims"
+    },
+    {
+        key: "origin",
+        icon: "📜",
+        name: "Origin Tracker",
+        description: "Trace origins and dates"
+    },
+    {
+        key: "disagreement",
+        icon: "⚖️",
+        name: "Disagreement Map",
+        description: "Compare different viewpoints"
+    },
+    {
+        key: "citation",
+        icon: "🔗",
+        name: "Citation Trail",
+        description: "Trace sources and references"
+    }
+];
+
 function renderMarkdown(container, text) {
     container.replaceChildren();
 
@@ -15,7 +42,6 @@ function renderMarkdown(container, text) {
     }
 
     function addInlineText(parent, text) {
-        // Links, bold, inline code aur italic ko pehchano.
         const pattern =
             /(\[([^\]]+)\]\((https?:\/\/[^\s)]+)\)|(https?:\/\/[^\s<]+)|(\*\*([^*]+)\*\*)|(`([^`]+)`)|(\*([^*]+)\*))/g;
 
@@ -24,16 +50,19 @@ function renderMarkdown(container, text) {
 
         while ((match = pattern.exec(text)) !== null) {
             parent.appendChild(
-                document.createTextNode(text.slice(lastIndex, match.index))
+                document.createTextNode(
+                    text.slice(lastIndex, match.index)
+                )
             );
 
             if (match[2] && match[3]) {
-                // Markdown link: [Title](https://example.com)
                 try {
                     const url = new URL(match[3]);
 
-                    if (url.protocol === "http:" ||
-                        url.protocol === "https:") {
+                    if (
+                        url.protocol === "http:" ||
+                        url.protocol === "https:"
+                    ) {
                         const link = document.createElement("a");
                         link.href = url.href;
                         link.textContent = match[2];
@@ -41,21 +70,26 @@ function renderMarkdown(container, text) {
                         link.rel = "noopener noreferrer";
                         parent.appendChild(link);
                     } else {
-                        parent.appendChild(document.createTextNode(match[0]));
+                        parent.appendChild(
+                            document.createTextNode(match[0])
+                        );
                     }
                 } catch {
-                    parent.appendChild(document.createTextNode(match[0]));
+                    parent.appendChild(
+                        document.createTextNode(match[0])
+                    );
                 }
             } else if (match[4]) {
-                // Plain URL
                 const rawUrl = match[4].replace(/[.,!?;:]+$/, "");
                 const trailing = match[4].slice(rawUrl.length);
 
                 try {
                     const url = new URL(rawUrl);
 
-                    if (url.protocol === "http:" ||
-                        url.protocol === "https:") {
+                    if (
+                        url.protocol === "http:" ||
+                        url.protocol === "https:"
+                    ) {
                         const link = document.createElement("a");
                         link.href = url.href;
                         link.textContent = rawUrl;
@@ -63,13 +97,19 @@ function renderMarkdown(container, text) {
                         link.rel = "noopener noreferrer";
                         parent.appendChild(link);
                     } else {
-                        parent.appendChild(document.createTextNode(rawUrl));
+                        parent.appendChild(
+                            document.createTextNode(rawUrl)
+                        );
                     }
                 } catch {
-                    parent.appendChild(document.createTextNode(rawUrl));
+                    parent.appendChild(
+                        document.createTextNode(rawUrl)
+                    );
                 }
 
-                parent.appendChild(document.createTextNode(trailing));
+                parent.appendChild(
+                    document.createTextNode(trailing)
+                );
             } else if (match[5]) {
                 const bold = document.createElement("strong");
                 bold.textContent = match[6];
@@ -101,19 +141,19 @@ function renderMarkdown(container, text) {
             continue;
         }
 
-        // Headings: #, ##, ###
         const heading = trimmed.match(/^(#{1,3})\s+(.+)$/);
 
         if (heading) {
             closeList();
+
             const level = heading[1].length;
             const element = document.createElement(`h${level}`);
+
             addInlineText(element, heading[2]);
             container.appendChild(element);
             continue;
         }
 
-        // Bullet list
         const bullet = trimmed.match(/^[-*]\s+(.+)$/);
 
         if (bullet) {
@@ -128,7 +168,6 @@ function renderMarkdown(container, text) {
             continue;
         }
 
-        // Numbered list
         const numbered = trimmed.match(/^\d+[.)]\s+(.+)$/);
 
         if (numbered) {
@@ -175,19 +214,85 @@ function removeWelcome() {
     }
 }
 
-async function sendMessage(text) {
+function addResearchButtons(container, originalQuestion) {
+    const section = document.createElement("div");
+    section.className = "research-tools";
+
+    const heading = document.createElement("p");
+    heading.className = "research-tools-heading";
+    heading.textContent = "Explore this answer further";
+
+    section.appendChild(heading);
+
+    const buttonGroup = document.createElement("div");
+    buttonGroup.className = "research-tools-grid";
+
+    researchTools.forEach((tool) => {
+        const button = document.createElement("button");
+
+        button.type = "button";
+        button.className = "research-tool-button";
+        button.dataset.tool = tool.key;
+        button.title = tool.description;
+
+        const title = document.createElement("span");
+        title.className = "research-tool-title";
+        title.textContent = `${tool.icon} ${tool.name}`;
+
+        const description = document.createElement("span");
+        description.className = "research-tool-description";
+        description.textContent = tool.description;
+
+        button.appendChild(title);
+        button.appendChild(description);
+
+        button.addEventListener("click", () => {
+            sendMessage(originalQuestion, tool.key);
+        });
+
+        buttonGroup.appendChild(button);
+    });
+
+    section.appendChild(buttonGroup);
+    container.appendChild(section);
+
+    chatArea.scrollTop = chatArea.scrollHeight;
+}
+
+async function sendMessage(text, researchTool = null) {
     const question = text.trim();
 
     if (!question) return;
 
+    const selectedTool = researchTools.find(
+        (tool) => tool.key === researchTool
+    );
+
     removeWelcome();
-    addMessage(question, "user");
+
+    // Show which focused research mode was selected.
+    const visibleQuestion = selectedTool
+        ? `${selectedTool.icon} ${selectedTool.name}\nOriginal question: ${question}`
+        : question;
+
+    addMessage(visibleQuestion, "user");
 
     userInput.value = "";
     userInput.disabled = true;
     sendButton.disabled = true;
 
-    const loadingMessage = addMessage("Thinking...", "assistant");
+    document
+        .querySelectorAll(".research-tool-button")
+        .forEach((button) => {
+            button.disabled = true;
+        });
+
+    const loadingMessage = addMessage(
+        selectedTool
+            ? `${selectedTool.name} is researching...`
+            : "Thinking...",
+        "assistant"
+    );
 
     try {
         const response = await fetch("/chat", {
@@ -195,12 +300,11 @@ async function sendMessage(text) {
             headers: {
                 "Content-Type": "application/json"
             },
-            
-      body: JSON.stringify({
-    message: question,
-    mode: document.getElementById("researchMode").value
-})
-
+            body: JSON.stringify({
+                message: question,
+                mode: document.getElementById("researchMode").value,
+                research_tool: researchTool
+            })
         });
 
         const data = await response.json();
@@ -209,20 +313,35 @@ async function sendMessage(text) {
             throw new Error(data.error || "Request failed.");
         }
 
-        renderMarkdown(loadingMessage, data.reply || "No answer received.");
-console.log("AI reply:", data.reply);
-console.log("New renderer loaded!");
+        const answer = data.reply || "No answer received.";
+
+        renderMarkdown(loadingMessage, answer);
+
+        // Show research buttons only after a normal AI answer.
+        if (!researchTool && answer !== "No answer received.") {
+            addResearchButtons(loadingMessage, question);
+        }
+
+        console.log("AI reply:", data.reply);
+        console.log("Research tool:", researchTool);
 
     } catch (error) {
         loadingMessage.textContent =
-            "Could not connect to the Python server. Check that app.py is running.";
-        loadingMessage.classList.add("error");
+            "Could not connect to the Python server. Check that your backend is running.";
 
+        loadingMessage.classList.add("error");
         console.error(error);
 
     } finally {
         userInput.disabled = false;
         sendButton.disabled = false;
+
+        document
+            .querySelectorAll(".research-tool-button")
+            .forEach((button) => {
+                button.disabled = false;
+            });
+
         userInput.focus();
     }
 }
