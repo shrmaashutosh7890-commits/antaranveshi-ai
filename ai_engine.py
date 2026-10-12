@@ -106,8 +106,8 @@ def generate_reply(question):
                 "type": "openrouter:web_search",
                 "parameters": {
                     "engine": "exa",
-                    "max_results": 5,
-                    "max_total_results": 10
+                    "max_results": 3,
+                    "max_total_results": 3
                 }
             }
         ],
