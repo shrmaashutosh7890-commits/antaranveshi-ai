@@ -123,8 +123,8 @@ def generate_reply(question, mode="quick"):
                 "type": "openrouter:web_search",
                 "parameters": {
                     "engine": "exa",
-                    "max_results": 3,
-                    "max_total_results": 3
+                    "max_results": max_results,
+                    "max_total_results":  max_total_results
                 }
             }
         ],
