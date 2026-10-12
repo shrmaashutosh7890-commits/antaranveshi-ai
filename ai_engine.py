@@ -54,6 +54,23 @@ def generate_reply(question, mode="quick"):
     if not api_key:
         return "API key missing. Set OPENROUTER_API_KEY in PowerShell."
 
+   
+    if mode == "deep":
+        max_results = 5
+        max_total_results = 5
+        research_instruction = (
+            "Perform detailed research. Compare multiple credible sources, "
+            "prioritize primary sources, verify important claims, "
+            "and explain disagreements and uncertainties."
+        )
+    else:
+        max_results = 3
+        max_total_results = 3
+        research_instruction = (
+            "Perform focused research. Find the most relevant credible "
+            "sources and answer clearly and concisely."
+        )
+
     payload = {
         "model": MODEL,
         "messages": [
