@@ -78,6 +78,7 @@ def generate_reply(question, mode="quick"):
                 "role": "system",
                 "content": (
                     "You are Antaranveshi AI, a careful research assistant. "
+                    + research_instruction + " "
                     "Use web search for every question before answering. "
                     "Prefer official and primary sources. "
                     "Whenever search results provide URLs, cite them as "
