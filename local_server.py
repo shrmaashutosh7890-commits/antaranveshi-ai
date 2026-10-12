@@ -20,12 +20,27 @@ class AntaranveshiHandler(SimpleHTTPRequestHandler):
             question = body.get("message", "").strip()
 
             if not question:
-                self.send_json({"reply": "Bhai, pehle apna sawal likh."})
+                self.send_json({
+                    "reply": "Bhai, pehle apna sawal likh."
+                })
                 return
 
             mode = body.get("mode", "quick")
-            answer = generate_reply(question, mode)
-            self.send_json({"reply": answer})
+
+            # New: receive the selected research tool
+            research_tool = body.get("research_tool")
+
+            # Generate normal or specialized research answer
+            answer = generate_reply(
+                question,
+                mode,
+                research_tool
+            )
+
+            self.send_json({
+                "reply": answer,
+                "research_tool": research_tool
+            })
 
         except Exception as error:
             print("Chat error:", error)
@@ -34,12 +49,22 @@ class AntaranveshiHandler(SimpleHTTPRequestHandler):
             })
 
     def send_json(self, data):
-        encoded = json.dumps(data, ensure_ascii=False).encode("utf-8")
+        encoded = json.dumps(
+            data, ensure_ascii=False
+        ).encode("utf-8")
+
         self.send_response(200)
-        self.send_header("Content-Type", "application/json; charset=utf-8")
+        self.send_header(
+            "Content-Type",
+            "application/json; charset=utf-8"
+        )
         self.send_header("Access-Control-Allow-Origin", "*")
-        self.send_header("Access-Control-Allow-Methods", "POST, OPTIONS")
-        self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        self.send_header(
+            "Access-Control-Allow-Methods", "POST, OPTIONS"
+        )
+        self.send_header(
+            "Access-Control-Allow-Headers", "Content-Type"
+        )
         self.send_header("Content-Length", str(len(encoded)))
         self.end_headers()
         self.wfile.write(encoded)
@@ -47,15 +72,27 @@ class AntaranveshiHandler(SimpleHTTPRequestHandler):
     def do_OPTIONS(self):
         self.send_response(204)
         self.send_header("Access-Control-Allow-Origin", "*")
-        self.send_header("Access-Control-Allow-Methods", "POST, OPTIONS")
-        self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        self.send_header(
+            "Access-Control-Allow-Methods", "POST, OPTIONS"
+        )
+        self.send_header(
+            "Access-Control-Allow-Headers", "Content-Type"
+        )
         self.end_headers()
 
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8000))
-    server = HTTPServer(("0.0.0.0", port), AntaranveshiHandler)
-    print(f"Antaranveshi AI backend is running on port {port}")
+
+    server = HTTPServer(
+        ("0.0.0.0", port),
+        AntaranveshiHandler
+    )
+
+    print(
+        f"Antaranveshi AI backend is running on port {port}"
+    )
+
     try:
         server.serve_forever()
     except KeyboardInterrupt:
