@@ -99,15 +99,10 @@ body {
 .logo-image {
     width: 66px;
     height: 66px;
+    display: block;
     object-fit: contain;
     border-radius: 50%;
     flex-shrink: 0;
-}
-
-    display: block;
-    object-fit: contain;
-
-    border-radius: 50%;
 
     filter: drop-shadow(
         0 4px 12px rgba(232, 189, 114, 0.12)
@@ -317,7 +312,7 @@ body {
     font-size: 18px;
 }
 
-/* Research mode */
+/* Research mode selector */
 
 .research-controls {
     display: flex;
@@ -467,6 +462,102 @@ body {
     font-size: 17px;
 }
 
+/* =====================================
+   Research tool buttons
+   ===================================== */
+
+.research-tools {
+    margin-top: 24px;
+    padding-top: 18px;
+
+    border-top: 1px solid var(--border);
+}
+
+.research-tools-heading {
+    margin: 0 0 13px;
+
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+.research-tools-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.research-tool-button {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 7px;
+
+    width: 100%;
+    min-width: 0;
+    padding: 14px;
+
+    border: 1px solid var(--border);
+    border-radius: 13px;
+
+    background: linear-gradient(
+        145deg,
+        rgba(232, 189, 114, 0.045),
+        rgba(17, 20, 26, 0.95)
+    );
+
+    color: var(--text);
+    font-family: inherit;
+    text-align: left;
+
+    cursor: pointer;
+
+    transition:
+        border-color 0.2s ease,
+        background 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.research-tool-button:hover {
+    border-color: rgba(232, 189, 114, 0.65);
+
+    background: linear-gradient(
+        145deg,
+        rgba(232, 189, 114, 0.12),
+        rgba(23, 27, 35, 0.98)
+    );
+
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.16);
+    transform: translateY(-2px);
+}
+
+.research-tool-button:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 3px;
+}
+
+.research-tool-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+.research-tool-title {
+    color: var(--gold-light);
+    font-size: 13px;
+    font-weight: 650;
+    line-height: 1.5;
+}
+
+.research-tool-description {
+    color: var(--muted);
+    font-size: 11px;
+    line-height: 1.5;
+}
+
 /* Footer */
 
 .footer {
@@ -487,7 +578,7 @@ body {
     color: var(--gold);
 }
 
-/* Chat messages: preserve existing JS classes */
+/* Chat messages */
 
 .message {
     max-width: 85%;
@@ -591,7 +682,7 @@ body {
     color: #c0c5ce;
 }
 
-/* Table wrapper: applies when renderer creates tables */
+/* Tables */
 
 .message table {
     display: block;
@@ -717,8 +808,36 @@ body {
         font-size: 13px;
     }
 
+    .research-tools {
+        margin-top: 20px;
+        padding-top: 15px;
+    }
+
+    .research-tools-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 8px;
+    }
+
+    .research-tool-button {
+        padding: 11px;
+    }
+
+    .research-tool-title {
+        font-size: 12px;
+    }
+
+    .research-tool-description {
+        font-size: 10px;
+    }
+
     .footer {
         padding: 15px 12px;
         font-size: 10px;
+    }
+}
+
+@media (max-width: 360px) {
+    .research-tools-grid {
+        grid-template-columns: 1fr;
     }
 }
