@@ -302,13 +302,14 @@ def generate_reply(question, mode="quick", research_tool=None):
             )
 
         except (urllib.error.URLError, TimeoutError, OSError) as error:
+            
+        except (urllib.error.URLError, TimeoutError, OSError) as error:
             print(
                 f"OpenRouter network/timeout error "
                 f"(attempt {attempt + 1}): {repr(error)}"
             )
 
             if attempt < MAX_RETRIES:
-                # Small delay avoids immediately repeating a transient failure.
                 time.sleep(0.5)
                 continue
 
@@ -317,17 +318,71 @@ def generate_reply(question, mode="quick", research_tool=None):
                 f"elapsed={round(time.monotonic() - started, 2)}s"
             )
 
+            # Quick Research fallback: retry without mandatory web search.
             if mode == "quick" and not research_tool:
+                try:
+                    fallback_payload = dict(payload)
+                    fallback_payload.pop("tools", None)
+
+                    fallback_payload["messages"] = list(payload["messages"])
+                    fallback_payload["messages"][0] = {
+                        "role": "system",
+                        "content": (
+                            BASE_INSTRUCTIONS
+                            + "\n\nAnswer directly and concisely using your "
+                            "existing knowledge. Web search was unavailable "
+                            "for this response. Do not claim that you searched "
+                            "or verified sources. If the question requires "
+                            "current or obscure facts, clearly state that "
+                            "limitation instead of guessing."
+                        ),
+                    }
+
+                    fallback_payload["max_tokens"] = 700
+
+                    fallback_result = make_request(
+                        api_key,
+                        fallback_payload,
+                        25,
+                    )
+
+                    fallback_answer, _ = extract_answer(fallback_result)
+
+                    if fallback_answer:
+                        print("Quick Research succeeded using no-search fallback.")
+                        return (
+                            fallback_answer
+                            + "\n\n**Verification note:** Web search was "
+                            "unavailable, so this answer has not been "
+                            "independently verified with online sources."
+                        )
+
+                    print("No usable answer from no-search fallback.")
+
+                except urllib.error.HTTPError as fallback_error:
+                    details = fallback_error.read().decode(
+                        "utf-8", errors="replace"
+                    )
+                    print(
+                        "Quick fallback HTTP error:",
+                        fallback_error.code,
+                        details[:1500],
+                    )
+
+                except (urllib.error.URLError, TimeoutError, OSError,
+                        ValueError, TypeError) as fallback_error:
+                    print("Quick fallback failed:", repr(fallback_error))
+
                 return (
-                    "Quick Research could not reach the AI service in time, "
-                    "even after a retry. Please try again. If this repeats, "
-                    "check the Render logs. No unverified answer was substituted."
+                    "The AI provider did not return an answer, even without "
+                    "web search. Check the Render logs for the provider error."
                 )
 
             return (
-                "The AI service could not be reached in time, even after a retry. "
-                "Please try again and check the deployment logs if it continues."
+                "The AI service could not be reached in time. "
+                "Check the Render logs and retry."
             )
+
 
         except (ValueError, TypeError) as error:
             print("Invalid API response:", repr(error))
