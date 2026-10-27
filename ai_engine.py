@@ -301,9 +301,7 @@ def generate_reply(question, mode="quick", research_tool=None):
                 "Check the deployment logs for details."
             )
 
-        except (urllib.error.URLError, TimeoutError, OSError) as error:
-            
-        except (urllib.error.URLError, TimeoutError, OSError) as error:
+         except (urllib.error.URLError, TimeoutError, OSError) as error:
             print(
                 f"OpenRouter network/timeout error "
                 f"(attempt {attempt + 1}): {repr(error)}"
